@@ -8,14 +8,18 @@ let medianCol3 = 0; // valore base della mediana colonna 4
 let meanCol4 = 0; // media colonna 4
 let stdCol4 = 0;  // deviazione standard colonna 4
 
+let col4Values = [];
+let col4Positions = [];
+
+
+
 function preload() {
   // Carico il dataset
   table = loadTable("dataset.csv", "csv", "header");
 }
 
-
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(800, 1000);
 
    // Ciclo su tutte le righe della tabella
   for (let r = 0; r < table.getRowCount(); r++) {
@@ -29,40 +33,111 @@ function setup() {
     }
   }
 
-   // 🔹 Calcola la media chiamando la tua funzione dedicata
+   // tutti i calcoli per le statistiche
   meanCol0 = calcMeanCol0(validRows);
-
-  // 🔹 Calcola la deviazione standard chiamando la tua funzione dedicata
   stdCol1 = calcStdCol1(validRows);
-
   modeCol2 = calcModeCol2(validRows);
-
   medianCol3 = calcMedianCol3(validRows);
-
   meanCol4 = calcMeanCol4(validRows);
   stdCol4 = calcStdCol4(validRows);
 
+
+  // Dopo aver calcolato meanCol4 e stdCol4
+col4Values = validRows.map(r => Number(r[4]));
+
+// Calcolo le posizioni dei pallini una volta sola
+let marginLeft = 80;
+let marginRight = 80;
+let yZero = 700; // riferimento verticale (y=0 del grafico)
+
+col4Positions = col4Values.map(v => {
+  let x = random(marginLeft + 10, width - marginRight - 10); // distribuzione orizzontale casuale
+  let y = yZero - v; // posizione verticale reale
+  return { x, y };
+});
 }
 
-function draw() {
+
+ function draw() {
   background(220);
 
+  // --- Testi con statistiche ---
   textAlign(CENTER, CENTER);
   textSize(20);
   fill(0);
-text("Media colonna 0: " + meanCol0, width / 2, height / 2 - 20);
-text("Deviazione standard colonna 1: " + stdCol1, width / 2, height / 2 + 20);
-text("Moda colonna 2: " + modeCol2.join(", "), width / 2, height / 2 + 60);
-text("Mediana colonna 3: " + medianCol3, width / 2, height / 2 + 100);
-text("Media colonna 4: " + meanCol4, width / 2, height / 2 + 140);
-text("Deviazione standard colonna 4: " + stdCol4, width / 2, height / 2 + 180);
+  text("Media colonna 0: " + meanCol0, width / 2, 40);
+  text("Deviazione standard colonna 1: " + stdCol1, width / 2, 70);
+  text("Moda colonna 2: " + modeCol2.join(", "), width / 2, 100);
+  text("Mediana colonna 3: " + medianCol3, width / 2, 130);
+
+  // --- Margini e riferimento verticale ---
+  let marginLeft = 80;
+  let marginRight = 80;
+  let yZero = 700; // riferimento verticale per 0
+  let graphWidth = width - marginLeft - marginRight;
+  let graphTop = 550;
+  let graphBottom = yZero;
+
+  // --- Titolo grafico ---
+  textAlign(CENTER, CENTER);
+  textSize(22);
+  fill(0, 0, 255);
+  text("5th column - Mean and Std Dev", width / 2, graphTop - 30);
+
+  // --- Scala verticale a sinistra ---
+  let tickValues = [100, 75, 50, 25, 0, -25, -50, -75, -100];
+  stroke(180);
+  strokeWeight(1);
+  fill(0);
+  textSize(14);
+  textAlign(RIGHT, CENTER);
+  tickValues.forEach(val => {
+    let y = yZero - val; // posizione reale verticale
+    text(val, marginLeft - 10, y);
+    line(marginLeft, y, width - marginRight, y); // linee orizzontali
+  });
+
+  // --- Rettangolo deviazione standard (arancione) ---
+  noStroke();
+  fill(255, 165, 0, 100);
+  let yTop = yZero - (meanCol4 + stdCol4);
+  let yBottom = yZero - (meanCol4 - stdCol4);
+  rect(marginLeft, yTop, graphWidth, yBottom - yTop);
+
+  // --- Linea media (blu) ---
+  stroke(0, 0, 255);
+  strokeWeight(5);
+  let yMedia = yZero - meanCol4;
+  line(marginLeft, yMedia, width - marginRight, yMedia);
+
+
+  // --- Pallini della colonna 4 (posizione fissa) ---
+  fill(0);
+  noStroke();
+  col4Positions.forEach(p => {
+    ellipse(p.x, p.y, 10, 10);
+  });
+
+  // --- Testo sopra rettangolo deviazione standard ---
+  fill(255,0, 0);
+  textAlign(RIGHT, BOTTOM);
+  text("Dev std: ± " + stdCol4.toFixed(2), width - marginRight, yTop - 5);
+
+
+  // Testo linea media
+  noStroke();
+  fill(0, 0, 255);
+  textAlign(LEFT, BOTTOM);
+  text("Media: " + meanCol4.toFixed(2), marginLeft, yMedia - 2);
+
+  
 }
 
 
 // Questa funzione riceve una riga del dataset (array di valori)
 // e restituisce true solo se la riga rispetta entrambe le regole:
-// 1️⃣ Il valore della colonna 0 è multiplo di 5
-// 2️⃣ Il valore della colonna 1 è un intero compreso tra 10 (incluso) e 50 (escluso)
+//  Il valore della colonna 0 è multiplo di 5
+//  Il valore della colonna 1 è un intero compreso tra 10 (incluso) e 50 (escluso)
 function isValidRow(row) {
   // Estrae i valori delle colonne come numeri
   let col0 = Number(row[0]);
