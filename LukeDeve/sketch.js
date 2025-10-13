@@ -104,6 +104,7 @@ col4Positions = col4Values.map(v => {
   let yBottom = yZero - (meanCol4 - stdCol4);
   rect(marginLeft, yTop, graphWidth, yBottom - yTop);
 
+  
   // --- Linea media (blu) ---
   stroke(0, 0, 255);
   strokeWeight(5);
