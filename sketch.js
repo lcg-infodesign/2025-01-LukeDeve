@@ -138,32 +138,52 @@ col4Positions = col4Values.map(v => {
 
 
  function draw() {
-  background(220);
+  push();
+  background(255, 250, 240); // colore di sfondo
+  pop();  
+
+  push();
 
   // Titolo 
 textAlign(CENTER, CENTER);
 textSize(28);
 fill(0); 
 textStyle(BOLD);
-text("1st ASSIGNMENT", width / 2, 60);
+text("ASSIGNMENT 1: load a datased", width / 2, 60);
 
 // Sottotitolo
 textSize(20);
 textStyle(NORMAL);
 text("Luca Golinelli", width / 2, 90);
 
+// --- Riquadro titolo ---
+fill(200, 200, 100, 50); // colore di riempimento (RGBA)
+stroke(100);
+strokeWeight(5);
+rect(100, 30, 600, 80, 10); // x, y, larghezza, altezza
 
+  pop();
+
+
+  push();
 
   // --- GRAFICO MEDIA COLONNA 0 --- //
   
   //variabile per la posizione della riga arancione - creo una variabile perche senno dovrei riscriverla un sacco di volte
 let yLine_col0 = 300; // posizione verticale della riga aranciano
 
+// --- Riquadro grafico colonna 0 ---
+fill(180, 100, 0,50);
+stroke(180, 100, 0);
+strokeWeight(5);
+rect(60, 200, 680, 150,10);
 
 // --- Titolo grafico colonna 0 ---
 textAlign(CENTER, CENTER);
 textSize(22);
-fill(0, 0, 255); // blu 
+strokeWeight(0);
+fill(180, 100, 0); 
+textStyle(BOLD);
 text("1st column - Min, Max and Mean", width / 2, yLine_col0 - 70); // width / 2. centra il tutto orizzontalmente
 
 // linea arancione (da min a max)
@@ -193,23 +213,43 @@ ellipse(meanDot, yLine_col0, 25, 25); // la posizione y è fissa siccome deve st
 fill(0);
 textAlign(CENTER, BOTTOM); // il testo sarà sopra l'altezza y data sotto, quindi sara scritto sopra il punto
 text("Mean: " + meanCol0.toFixed(2), meanDot, yLine_col0 - 18); //.toFixed(2) arrotonda a 2 cifre decimali
-// --- Fine grafico colonna 0 --- //
+// --- FINE GRAFICO MEDIA COLONNA 0 --- //
 
+pop();
+
+
+  push();
   // --- Testo con dev std della prima colonnas ---
   textAlign(CENTER, CENTER);
   textSize(22);
   fill(0, 0, 255);
-  text("2nd column Standard Deviation: " + stdCol1.toFixed(2), width / 2, 400)
+  textStyle(BOLD);
+  text("2nd column Standard Deviation: " + stdCol1.toFixed(2), width / 2, 420)
 
-    // --- FINE GRAFICO MEDIA COLONNA 0 --- //
+  // --- Riquadro testo deviazione standard colonna 1 ---
+fill(0, 180, 180,50);
+stroke(0, 180, 180);
+strokeWeight(5);
+rect(190, 395, 420, 50,10);
+    
+  pop();
 
 
+push();
   // --- GRAFICO MODA COLONNA 2 ---
+
+  // --- Riquadro grafico colonna 2 (moda) ---
+fill(255, 200, 240,150);
+stroke(255, 0, 0);
+strokeWeight(5);
+rect(60, 490, 680, 320,10);
 
   // Titolo del grafico
 textAlign(CENTER, CENTER);
 textSize(22);
-fill(0, 0, 255);
+strokeWeight(0);
+fill(255, 0, 0);
+textStyle(BOLD);
 text("3rd column - Mode", width / 2, 520);
 
 // --- Curva  ---
@@ -241,28 +281,47 @@ text("Mode: " + modeCol2, 650, yModaLine - 5);
 
 // --- FINE GRAFICO MODA COLONNA 2 ---
 
+  pop();
 
+
+  push();
+  // --- Riquadro testo mediana quarta colonna ---
+fill(0, 120, 255,50);
+stroke(0, 120, 255);
+strokeWeight(5);
+rect(250, 870, 300, 60,10);
   // --- Testo mediana quarta colonna  ---
   textAlign(CENTER, CENTER);
   textSize(22);
+  strokeWeight(0);
   fill(0, 0, 255);
+  textStyle(BOLD);
   text("4th column median: " + medianCol3, width / 2, 900);
+pop();
 
 
-
+push();
   // --- GRAFICO colonna 4 ---
 
+  
 
 //calcolo variabile larghezza del grafico
   let graphWidth = width - marginLeft - marginRight;
 
 
+  // --- Riquadro grafico colonna 4 ---
+fill(0, 200, 0,50);
+stroke(0, 200, 0);
+strokeWeight(2);
+rect(35, 1000, 725, 350,10);
 
   // --- Titolo grafico ---
   textAlign(CENTER, CENTER);
   textSize(22);
-  fill(0, 0, 255);
-  text("5th column - Mean and Std Dev", width / 2, 1070);
+  strokeWeight(0);
+  fill(0, 200, 0);
+  textStyle(BOLD);
+  text("5th column - Mean and Std Dev", width / 2, 1050);
 
   // --- Scala verticale a sinistra ---
   let tickValues = [100, 75, 50, 25, 0, -25, -50, -75, -100]; //scrivo una array con i valori che voglio sulla scala
@@ -314,7 +373,7 @@ text("Mode: " + modeCol2, 650, yModaLine - 5);
   text("Mean: " + meanCol4.toFixed(2), marginLeft, yMedia - 2);
 
   // --- FINE grafco colonna 4 ---
-  
+  pop();  
 }
 
 
